@@ -3,9 +3,9 @@
 cat /etc/passwd 
 
 #（http_server.sh）Http server服务 
-'''console
+```console
 f=$1
 ip=`hostname -I| cut -d' ' -f1`
 echo "http://${ip}:8001/${f}"
 python -m http.server 8001   # 运行
-'''
+```
