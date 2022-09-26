@@ -1,11 +1,11 @@
 ## Introduction
 查看所有用户对应的权限路径
-```
+```shell
 $ cat /etc/passwd 
 ```
 
 Http server服务 （http_server.sh）
-```
+```shell
 f=$1
 ip=`hostname -I| cut -d' ' -f1`
 echo "http://${ip}:8001/${f}"
@@ -14,7 +14,7 @@ python -m http.server 8001   # 运行
 
 tmux分屏终端
 是一个终端复用器，可以启动一系列会话
-```
+```shell
 $ tmux                         # 启动
 $ exit / Ctrl + D                  # 退出
 $ tmux new -s <name>            # 启动命名tmux
@@ -30,7 +30,7 @@ $ ctrl + b, +[                     #翻页
 ```
 
 tar/zip 压缩/解压
-```
+```shell
 $ zip –q –r xahot.zip /home/wwwroot/xahot   #压缩
 $ unzip -o -d /home/sunny myfile.zip    #把myfile.zip文件解压到 /home/sunny/
 $ tar -xf all.tar                      # tar 解压
@@ -38,13 +38,13 @@ $ tar -zcvf test.tar test                # tar 压缩
 ```
 
 重命名
-```
+```shell
 $ mv /a /b/c     a文件夹移动到b下名字为c
 $ mv a b        当前目录重命名
 ```
 
 文件个数
-```
+```shell
 统计当前目录下文件的个数（不包括目录）
 $ ls -l | grep "^-" | wc -l
 
