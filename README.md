@@ -61,11 +61,11 @@ $ wc -l datas.txt.dyinfo.txt
 Git
 ```
 # 上传到master
-git init
-git remote add origin <path.git>
-git add .
-git commit -m "[feat] add a new feature"
-git push -u origin master
+$ git init
+$ git remote add origin <path.git>
+$ git add .
+$ git commit -m "[feat] add a new feature"
+$ git push -u origin master
 
 # descript
 # [feat]: 新功能
@@ -74,14 +74,14 @@ git push -u origin master
 # [refactor]: 代码重构
 
 # 上传到branch分支
-git clone <path.git>
-git branch # 查看所有branch
-git checkout -b feat/wzq # 新建feat/wzq 的branch
-cp -r xxx1 xxx2
-git status # 查看改变的结果
-git add .
-git commit -m "[feat] xxx"
-git push origin feat/wzq
+$ git clone <path.git>
+$ git branch # 查看所有branch
+$ git checkout -b feat/wzq # 新建feat/wzq 的branch
+$ cp -r xxx1 xxx2
+$ git status # 查看改变的结果
+$ git add .
+$ git commit -m "[feat] xxx"
+$ git push origin feat/wzq
 
 # branch 操作
 $ git branch                      # 查看本地分支
@@ -96,8 +96,8 @@ $ git push origin [name]          # 创建远程分支(本地分支push到远�
 $ git push origin --delete [name] # 删除远程分支：
 
 # Tag
-git tag -a v1.1 -m 'v1.1' # 将当前版本添加v1.1的tag
-git push origin v1.1
+$ git tag -a v1.1 -m 'v1.1' # 将当前版本添加v1.1的tag
+$ git push origin v1.1
 
-git tag -d <tagname> # 删除 tag
+$ git tag -d <tagname> # 删除 tag
 ```
