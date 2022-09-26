@@ -39,27 +39,27 @@ $ tar -zcvf test.tar test                # tar 压缩
 
 重命名
 ```shell
-$ mv /a /b/c     a文件夹移动到b下名字为c
-$ mv a b        当前目录重命名
+$ mv /a /b/c     # a文件夹移动到b下名字为c
+$ mv a b        # 当前目录重命名
 ```
 
 文件个数
 ```shell
-统计当前目录下文件的个数（不包括目录）
+# 统计当前目录下文件的个数（不包括目录）
 $ ls -l | grep "^-" | wc -l
 
-统计当前目录下文件的个数（包括子目录）
+# 统计当前目录下文件的个数（包括子目录）
 $ ls -lR| grep "^-" | wc -l
 
-查看某目录下文件夹(目录)的个数（包括子目录）
+# 查看某目录下文件夹(目录)的个数（包括子目录）
 $ ls -lR | grep "^d" | wc -l
 
-查看文件多少行
+# 查看文件多少行
 $ wc -l datas.txt.dyinfo.txt
 ```
 
 Git
-```
+```shell
 # 上传到master
 $ git init
 $ git remote add origin <path.git>
