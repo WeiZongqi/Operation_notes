@@ -1,7 +1,31 @@
 ## Introduction
-查看所有用户对应的权限路径
+Linux 命令
 ```shell
+# 查看所有用户对应的权限路径
 $ cat /etc/passwd 
+
+# ----------------------------------
+# 实时监控
+$ watch -n 1 nvidia-smi
+
+# ----------------------------------
+# 文件个数
+# 统计当前目录下文件的个数（不包括目录）
+$ ls -l | grep "^-" | wc -l
+
+# 统计当前目录下文件的个数（包括子目录）
+$ ls -lR| grep "^-" | wc -l
+
+# 查看某目录下文件夹(目录)的个数（包括子目录）
+$ ls -lR | grep "^d" | wc -l
+
+# 查看文件多少行
+$ wc -l datas.txt.dyinfo.txt
+
+# ----------------------------------
+# 重命名
+$ mv /a /b/c     # a文件夹移动到b下名字为c
+$ mv a b        # 当前目录重命名
 ```
 
 Http server服务 （http_server.sh）
@@ -37,25 +61,42 @@ $ tar -xf all.tar                      # tar 解压
 $ tar -zcvf test.tar test                # tar 压缩
 ```
 
-重命名
+Docker
 ```shell
-$ mv /a /b/c     # a文件夹移动到b下名字为c
-$ mv a b        # 当前目录重命名
-```
+# 参考
+# https://www.jianshu.com/p/0baa53de436a
+# https://segmentfault.com/a/1190000012063374
 
-文件个数
-```shell
-# 统计当前目录下文件的个数（不包括目录）
-$ ls -l | grep "^-" | wc -l
+# docker 操作
+$ docker ps -a  # 列出所有 docker
+$ sudo docker attach 44fc0f0582d9   # 最后是 容器id
 
-# 统计当前目录下文件的个数（包括子目录）
-$ ls -lR| grep "^-" | wc -l
+# 对镜像中操作后需要保存当前镜像，否则，下次进入就清零了
+$ docker commit 3b1be8838a8a test-python3.8
 
-# 查看某目录下文件夹(目录)的个数（包括子目录）
-$ ls -lR | grep "^d" | wc -l
+# 启动保存的镜像
+$ docker run -i -t test-python3.8 /bin/bash
 
-# 查看文件多少行
-$ wc -l datas.txt.dyinfo.txt
+# 强制删除images
+$ docker rm -f <id>
+
+#打包
+$ docker container ls -a
+
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+7691a814370e ubuntu:18.04 "/bin/bash" 36 hours ago Exited (0) 21
+
+$ docker export 7691a814370e > ubuntu.tar
+
+#导入
+$ cat ubuntu.tar | docker import - test/ubuntu:v1.0
+$ docker image ls
+REPOSITORY TAG IMAGE ID CREATED VIRTUAL SIZE
+test/ubuntu v1.0 9d37a6082e97 About a minute ago 171.3 MB
+
+or
+
+$ docker import http://example.com/exampleimage.tgz example/imagerepo
 ```
 
 Git
@@ -110,4 +151,56 @@ $ conda create -n name python=3.7
 $ conda activate name
 $ conda deactivate
 $ conda remove -n name
+
+# PyPI镜像使用
+# 临时使用
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple <some-package>
+
+# 设为默认
+# 升级到pip >= 10.0.0
+$ python -m pip install --upgrade pip
+$ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# 如果pip 默认源的网络连接较差，临时使用本镜像站来升级 pip
+$ python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip
+
+
+# conda 添加清华源
+$ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+$ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+$ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+$ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
+$ conda config --set show_channel_urls yes
+
+```
+
+python 包
+```shell
+# opencv安装
+$ pip install opencv-python
+$ pip install opencv-contrib-python
+
+# kornia 0.5.8对应torch 1.7 以上对应1.8
+
+# Pycocotools windows 安装
+$ conda install -c conda-forge pycocotools
+$ pip install pycocotools-windows
+
+# from shapely.geometry import Polygon找不到指定模块
+$ pip uninstall shapely
+# 然后执行
+$ conda install shapely
+
+# CRF环境安装
+# windows
+https://blog.csdn.net/weixin_38899860/article/details/95320949
+
+# ubuntu
+$ pip install cython 
+$ pip install git+https://github.com/lucasb-eyer/pydensecrf.git
+```
+
+软件
+```shell
+# 录屏软件ocam
+https://gsf-fl.softonic.com/263/0e1/aba6f8ad9bc21bf4bc0e95c4dc13a9e8e0/oCam_v520.0.exeExpires=1662597752&Signature=3905c167ee2f7f91f617eca595c780682f40aa73&url=https://ocam.en.softonic.com&Filename=oCam_v520.0.exe
 ```
