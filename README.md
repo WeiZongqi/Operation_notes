@@ -102,3 +102,12 @@ $ git push origin v1.1
 
 $ git tag -d <tagname> # 删除 tag
 ```
+
+Conda 操作
+```shell
+$ conda env list #列出已有环境
+$ conda create -n name python=3.7
+$ conda activate name
+$ conda deactivate
+$ conda remove -n name
+```
