@@ -207,3 +207,15 @@ $ pip install git+https://github.com/lucasb-eyer/pydensecrf.git
 # 录屏软件ocam
 https://gsf-fl.softonic.com/263/0e1/aba6f8ad9bc21bf4bc0e95c4dc13a9e8e0/oCam_v520.0.exeExpires=1662597752&Signature=3905c167ee2f7f91f617eca595c780682f40aa73&url=https://ocam.en.softonic.com&Filename=oCam_v520.0.exe
 ```
+
+Python书写
+```shell
+# @statocmethod 标签，用于定义常用函数
+@staticmethod
+def find_max_region(mask_sel):
+    pass
+
+# _seg(self), 子功能
+def _seg(self):
+    pass
+```
