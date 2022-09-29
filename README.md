@@ -14,13 +14,16 @@ $ watch -n 1 nvidia-smi
 $ ls -l | grep "^-" | wc -l
 
 # 统计当前目录下文件的个数（包括子目录）
-$ ls -lR| grep "^-" | wc -l
+$ ls -lR | grep "^-" | wc -l
 
 # 查看某目录下文件夹(目录)的个数（包括子目录）
 $ ls -lR | grep "^d" | wc -l
 
 # 查看文件多少行
 $ wc -l datas.txt.dyinfo.txt
+
+# 子文件大小
+$ du -h --max-depth=1
 
 # ----------------------------------
 # 重命名
