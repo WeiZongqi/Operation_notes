@@ -153,7 +153,7 @@ $ conda env list #列出已有环境
 $ conda create -n name python=3.7
 $ conda activate name
 $ conda deactivate
-$ conda remove -n name
+$ conda env remove -n name
 
 # PyPI镜像使用
 # 临时使用
