@@ -91,7 +91,7 @@ docker rm container_id # 删除
 - 传到自建(公司)第三方库
 ```shell
 # 1. docker默认安全地址为dockhub，因此自建库需要在 docker desktop的setting里的docker engine添加“insecure-registries"如下：
-```
+
 {
   "builder": {
     "gc": {
@@ -108,7 +108,7 @@ docker rm container_id # 删除
     "harbor.smoa.cc"
   ]
 }
-```
+
 # 2. 重命名镜像并且推送到自建库
 docker login https://harbor.smoa.cc
 docker tag myimage:tag harbor.smoa.cc/myimage:tag
