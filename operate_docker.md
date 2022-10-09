@@ -1,4 +1,4 @@
-# Operation docker
+# Operation docker, 参考[docs](https://acute-sleep-247.notion.site/55073e5eb4b249eaa5c8320d114fc8d7)
 
 ## 第一部分：toy-example
 参考[create first Docker](https://www.freecodecamp.org/news/a-beginners-guide-to-docker-how-to-create-your-first-docker-application-cc03de9b639f/)
@@ -231,8 +231,36 @@ docker跑tensorboard
 docker run -it -v /d/RepDistiller/save/student_tensorboards/S-resnet8x4_T-resnet32x4_cifar100_kd_r-0.1_a-0.9_b-0.0 _1:/workspace/showtmp  -p 16006:6006 --name aaaaa 10.81.138.201:5000/torchdistill:torch180cuda11v2.0
 ```
 ### 关于win10下修改docker镜像存储位置-通过软连接（MKLINK）修改
+方法一: 更改Docker Desktop设定
+1. 右键docker desktop图标点击Settings
+2. 点击左侧menu，找到Resources按钮，点击并找到Disk Image Location点击browse并且改变Location
+3. 点击apply and restart
+使用该方法的同学可能会遇到根本找不到这个setting的情况，因为不同的版本该设置选项会出现在不同的地方，大家可以多找找。但是也有可能根本没有这个选项，我就是遇到这个情况，请大家尝试下一个方法(版本问题)
+
+方法二: 创建软连接
+1. 启动docker下查看docker的存储位置
+```shell
+docker info
+```
+查看`Docker Root Dir`对应的列表, 但是并不能看到在win下的路径
+2. 通过Everything或者资源管理器，查看`.vhdx`结尾的文件所在位置，这些就是docker镜像路径
+3. 将找到的`data/ext4.vhdx`，复制到如D盘下, 得到`D:/docker/data/ext4.vhdx`
+4. 删除源文件，本文对应的是`data/ext4.vhdx`
+5. 以管理员运行cmd并使用`mklink`命令创建软连接
+```shell
+# 创建软连接
+mklink /J C:\Users\wzq\AppData\Local\Docker\wsl\data D:\docker\data
+
+# 如果之后需要删除软连接
+rmdir C:\Users\wzq\AppData\Local\Docker\wsl\data
+```
+6. 重新打开Docker Desktop, docker info 查看存储位置
+
 
 ### 注意事项
+每次在Docker配置好后需要先commit, 然后push
+dockerhub拉取python的时候, 搜索python进入官方库, 然后在最上方tags搜索版本
+XXXX
 
 ### 关于集群架构和Docker踩坑记录
 #### Docker概念
@@ -255,4 +283,107 @@ Docker包含两部分: 容器(Container)+镜像(images), 打个不恰当的彼�
 
 - 数据节点：
     对用户可见，在 `**/data/home/username**` 文件夹下；在该目录下用户上传程序所需文件，且其余普通用户不可访问； 该节点每次启动时（即创建job时），需要指定image，以及模式(debug和run);
-    
+    img.jpg
+
+## 集群Debug
+### 集群debug
+```shell
+# 
+schedctl create --name test --image "tensorflow/tensorflow:devel-gpu" --cmd "sleep 30m" --debug
+
+schedctl exec test
+```
+注意事项：
+- debug模式下不能指定gpu，否则会报websokcet的错误
+- sleep 30m 不能写30 min
+- sleep 3多个job命令用 分号(；)隔开0m 不能写30 min
+- 在cmd里如果不加入 “sleep 2h”这个shell命令，debug进去会显示找不到容器
+
+### 本地debug
+1. 本地docker容器开启ssh server, 参考[docs](https://www.zymblog.top/blog/235)
+```shell
+# 开启容器
+docker run -it ubuntu:18.04 /bin/bash
+# 更新源
+apt-get update
+apt-get install vim
+# 安装ssh服务
+apt-get install openssh-server
+# 创建/var/run/sshd文件夹
+mkdir -p /var/run/sshd
+# 启动ssh服务
+/usr/sbin/sshd -D &
+# 查看网络状态，看看22端口是否处于监听的状态
+apt-get install net-tools
+netstat -tunlp
+
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      3862/sshd           
+tcp6       0      0 :::22                   :::*                    LISTEN      3862/sshd
+# 取消pam登录限制
+sed -ri 's/session required pam-loginuid.so/#session required pam_loginuid.so/g' /etc/pam.d/sshd
+# 修改sshd的设置，可以让容器使用ssh登录root账号
+vim /etc/ssh/sshd_config
+将PermitRootLogin的值从withoutPassword改为yes
+# 创建.ssh目录，并创建authorized_keys文件
+mkdir -p /root/.ssh
+touch /root/.ssh/authorized_keys
+# 添加自启动SSH服务的脚本run.sh
+touch /run.sh
+vim /run.sh
+# run.sh内容是：
+#!/bin/bash
+/usr/sbin/sshd -D
+# run.sh添加执行权限
+chmod +x /run.sh
+# 修改root密码
+passwd 
+
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
+root@1f250848d3c5:/#
+```
+2. add sudo username(集群的username), 参考[docs](https://blog.csdn.net/bryanwang_3099/article/details/109787215)
+```shell
+apt-get update -y && apt-get clean all
+
+apt-get install -y sudo
+
+echo "%sudo ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+adduser yifengxie
+
+vim /etc/sudoers
+
+# 在/etc/sudoers文件中找到root	ALL=(ALL:ALL) ALL，在该行下面添加：
+yifengxie	ALL=(ALL:ALL) ALL
+
+su yifengxie # 切换用户
+sudo ls # 使用sudo权限执行ls，只要不报错就证明设置成功。
+```
+3. 制作好的镜像push到集群(参考上述上传步骤)
+4. 集群debug容器开启，注意  --ports指定只能在debug模式
+```shell
+schedctl create --name ssh51 --image "10.81.138.201:5000/imagename:tag" --gpu 1 --cmd "sleep 2h" --debug --ports 22
+```
+5. 进去容器开启ssh server, 参考[docs](https://blog.csdn.net/md521/article/details/52597398)
+```shell
+sudo apt-get update
+
+sudo apt-get install openssh-server
+
+sudo ps -e |grep ssh
+
+sudo service ssh start
+
+sudo ps -e |grep ssh
+```
+6. schedctl describe 查看job的远程debug节点`ip`以及`port`(默认会将22号端口映射为其他可用的，需要手动查看)
+XXX.jpg
+7. 上都完成后，就可以将集y群看做一般的远程服务器，用pycharm或者ssh连接（但是ssh试了不行，pycharm是可以的）
+XXX.jpg
+
