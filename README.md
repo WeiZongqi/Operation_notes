@@ -127,6 +127,10 @@ $ git add .
 $ git commit -m "[feat] xxx"
 $ git push origin feat/wzq
 
+## 拉取指定分支
+$ git checkout -b dev origin/dev    # 切换到dev开发分支
+$ git submodule update --init --recursive    # 将多个或指定(将“--recursive” 替换成所指定的submodule名称)的submodule更新到本地
+
 # branch 操作
 $ git branch                      # 查看本地分支
 $ git branch -r                   # 查看远程分支
