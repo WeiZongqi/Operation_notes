@@ -149,11 +149,16 @@ $ git tag -a v1.1 -m 'v1.1' # 将当前版本添加v1.1的tag
 $ git push origin v1.1
 
 $ git tag -d <tagname> # 删除 tag
-```
+$ git push --delete origin <tagname> # 删除远程 tag
+``` 
 
 Conda 操作
 ```shell
 $ conda env list #列出已有环境
+$ conda env export > py37.yaml # 导出当前环境
+$ conda env create -f py37.yaml # 用yaml文件安装环境
+
+# 自己建立
 $ conda create -n name python=3.7
 $ conda activate name
 $ conda deactivate
@@ -161,7 +166,9 @@ $ conda env remove -n name
 
 # PyPI镜像使用
 # 临时使用
-pip install -i https://pypi.tuna.tsinghua.edu.cn/simple <some-package>
+$ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple <some-package>
+# txt文件安装
+$ pip install -r requirements.txt
 
 # 设为默认
 # 升级到pip >= 10.0.0
