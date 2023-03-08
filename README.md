@@ -150,6 +150,9 @@ $ git push origin v1.1
 
 $ git tag -d <tagname> # 删除 tag
 $ git push --delete origin <tagname> # 删除远程 tag
+
+# log 查看分支信息
+git log --oneline --graph --decorate
 ``` 
 
 Conda 操作
