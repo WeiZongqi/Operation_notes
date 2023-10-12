@@ -121,6 +121,8 @@ $ git push -u origin master
 $ git clone <path.git>
 $ git branch # 查看所有branch
 $ git checkout -b feat/wzq # 新建feat/wzq 的branch
+$ git checkout tags/v0.1.0 # 切花到对应的标签
+$ git checkout tags/v0.1.0 #拉取所有子模块目录
 $ cp -r xxx1 xxx2
 $ git status # 查看改变的结果
 $ git add .
